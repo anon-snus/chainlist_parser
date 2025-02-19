@@ -1,2 +1,7 @@
-# monad_balance
-# chainlist_parser
+# Chainlist parser 
+
+данный скрипт позволяет найти рабочие рпс с chainlist 
+
+get_chains_names() # генерирует файл json с корректными названиями сетей (как нужно для апи)
+
+get_rpcs_list(chain_name='Base') # возвращает список рабочих  rpc с отсутствующим либо низким уровней слежки за пользователем 
