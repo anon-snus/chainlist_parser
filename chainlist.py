@@ -59,6 +59,7 @@ class ChainList:
 										try:
 											a = await async_post(url=n['url'], json=json_data, timeout=1, proxy=self.proxy)
 											if a:
+												return n['url']
 												rpcs_list.append(n['url'])
 										except Exception as e:
 											pass
