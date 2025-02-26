@@ -39,6 +39,7 @@ class ChainList:
 		finds list of public working https rpcs with no or small tracking
 		:param connection_type: type of connection put 'htt' for https or 'wss' for wss
 		:param chain_name: get chain name from chains.json for correct work
+  		:param current_rpc: current rpc which does not work 
 		:return: list of good rpcs
 		'''
 		url = 'https://chainlist.org/'
