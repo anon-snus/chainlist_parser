@@ -1,8 +1,8 @@
 import asyncio
-from utils.utils import async_get, async_post, json_data
+from libs.eth_async.utils.utils import async_get, async_post
 from bs4 import BeautifulSoup
 import json
-
+import random
 class ChainList:
 	def __init__(
 			self,
@@ -34,7 +34,7 @@ class ChainList:
 				await asyncio.sleep(1)
 		print('Не получилось получить названия сетей')
 
-	async def get_rpcs_list(self, chain_name:str, connection_type:str='htt'):
+	async def get_rpcs_list(self, chain_name:str, connection_type:str='htt', current_rpc:str|None=None):
 		'''
 		finds list of public working https rpcs with no or small tracking
 		:param connection_type: type of connection put 'htt' for https or 'wss' for wss
@@ -50,6 +50,9 @@ class ChainList:
 				script_tag = soup.find("script", {"id": "__NEXT_DATA__", "type": "application/json"})
 				data = json.loads(script_tag.string)
 				rpcs_list = []
+				json_data = {
+					'jsonrpc': '2.0', 'method': 'eth_getBlockByNumber', 'params': ['latest', False, ], 'id': 1,
+				}
 				for i in data['props']['pageProps']['chains']:
 					if i['name'].lower() == chain_name.lower():
 						for n in i['rpc']:
@@ -59,11 +62,13 @@ class ChainList:
 										try:
 											a = await async_post(url=n['url'], json=json_data, timeout=1, proxy=self.proxy)
 											if a:
-												return n['url']
-												rpcs_list.append(n['url'])
+												if n['url'] != current_rpc:
+													return n['url']
+												# rpcs_list.append(n['url'])
+												# return n['url']
 										except Exception as e:
 											pass
-				return rpcs_list
+				# return random.choice(rpcs_list)
 			except Exception as e:
 				print(e)
 				await asyncio.sleep(1)
